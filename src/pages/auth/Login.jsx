@@ -28,8 +28,8 @@ export default function Login() {
       const res = await loginUser(formData);
 
       const user = res.user;
-      alert("user found")
-      console.log(user)
+      // alert("user found")
+      // console.log(user)
 
       // store user locally
       localStorage.setItem("user", JSON.stringify(user));

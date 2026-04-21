@@ -10,10 +10,10 @@ export const createDivision = (name) =>
     body :{division :name}
   });
 
-export const updateDivision = (id) =>
+export const updateDivision = (id,isActive) =>
   apiClient(`/division/updateDivision/${id}`, {
     method: "POST",
-    // body: { division: name },
+    body: { isActive }
   });
 
 export const deleteDivision = (id) =>

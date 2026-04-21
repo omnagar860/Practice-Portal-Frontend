@@ -1,13 +1,13 @@
 import { useState, useEffect } from "react";
 
-export default function PostModal({ isOpen, type, editData, onClose, onSubmit }) {
+export default function PostModal({ isOpen, type, editData, onClose, onSubmit,error, setError }) {
     const [postName, setPostName] = useState("");
-    const [error, setError] = useState(null);
+    // const [error, setError] = useState(null);
 
     useEffect(() => {
         if (!isOpen) return;
 
-        setError(null);
+        // setError(null);
 
         if (type === "create") {
             setPostName("");

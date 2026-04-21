@@ -9,8 +9,8 @@ export default function PostList() {
     type: null,
     editData: null
     });
-    const [loading] = useState(false);
-    const [error] = useState(null);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
 
     useEffect(()=> {
         fetchAllPost()
@@ -40,31 +40,56 @@ const closeModal = () =>
 
     // ✅ Toggle status (mock)
 const handleSubmit = async (data) => {
-    try {
-        if (modal.type === "create") {
-            // await createPost({ postName: data.postName });
-            await createPost( data.postName);
-            closeModal()
-        }
+  try {
+    setError(null);
 
-        if (modal.type === "toggle") {
-            await updatePost(data.id);
-        }
+    if (modal.type === "create") {
+      const result = await createPost(data.postName);
 
-        if (modal.type === "delete") {
-            await deletePost(data.id);
-        }
-
+      if (result.success) {
         await fetchAllPost();
         closeModal();
-    } catch (err) {
-        console.error(err);
+        return;
+      } else {
+        setError(result.message || "Unable to create post");
+        return;
+      }
     }
+
+    if (modal.type === "toggle") {
+      const result = await updatePost(data.id);
+
+      if (result.success) {
+        await fetchAllPost();
+        closeModal();
+        return;
+      } else {
+        setError(result.message || "Unable to update post");
+        return;
+      }
+    }
+
+    if (modal.type === "delete") {
+      const result = await deletePost(data.id);
+
+      if (result.success) {
+        await fetchAllPost();
+        closeModal();
+        return;
+      } else {
+        setError(result.message || "Unable to delete post");
+        return;
+      }
+    }
+  } catch (err) {
+    console.error(err);
+    setError(err.message || "Something went wrong");
+  }
 };
 
 
     if (loading) return <p className="p-6 text-gray-400 text-sm">Loading...</p>;
-    if (error) return <p className="p-6 text-red-500 text-sm">{error}</p>;
+    // if (error) return <p className="p-6 text-red-500 text-sm">{error}</p>;
 
     return (
         <div className="flex-1 bg-gray-50 p-6">
@@ -132,6 +157,8 @@ const handleSubmit = async (data) => {
     editData={modal.editData}
     onClose={closeModal}
     onSubmit={handleSubmit}
+    error={error}
+    setError={setError}
 />
         </div>
     );

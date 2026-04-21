@@ -29,20 +29,20 @@ export default function DivisionList() {
     const closeModal = () => setModal({ open: false, editData: null });
 
     // called from modal on save/confirm
-    const handleSubmit = async ({ id, name }) => {
-        console.log(id, name)
+    const handleSubmit = async ({ id, name ,isActive}) => {
         try {
             if (id) {
                 // deactivate existing division
-                await updateDivision(id);
+                await updateDivision(id,isActive);
             } else {
                 // create new division
                 await createDivision(name);
             }
-            await fetchDivisions();
+            const result =  await fetchDivisions();
+            console.log( "fetched divisionm list", result,result?.data)
             closeModal();
         } catch (err) {
-            console.error("Error:", err);
+            // console.error("Error:", err);
             setError(err.message);
         }
     };
@@ -52,13 +52,13 @@ export default function DivisionList() {
             await deleteDivision(id);
             await fetchDivisions();
         } catch (err) {
-            console.error("Error deleting division:", err);
+            // console.error("Error deleting division:", err);
             setError(err.message);
         }
     };
 
     if (loading) return <p className="p-6 text-gray-400 text-sm">Loading...</p>;
-    if (error) return <p className="p-6 text-red-500 text-sm">{error}</p>;
+    // if (error) return <p className="p-6 text-red-500 text-sm">{error}</p>;
 
     return (
         <div className="flex-1 bg-gray-50 p-6">
@@ -89,7 +89,7 @@ export default function DivisionList() {
                         </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-100">
-                        {divisions.filter(d => d.isActive).map((d, i) => (
+                        {divisions.map((d, i) => (
                             <tr key={d.id} className="hover:bg-gray-50">
                                 <td className="px-4 py-3 text-gray-400">{i + 1}</td>
                                 <td className="px-4 py-3 font-medium">{d.division_name}</td>
@@ -124,6 +124,7 @@ export default function DivisionList() {
                 editData={modal.editData}
                 onClose={closeModal}
                 onSubmit={handleSubmit}
+                error={error}
             />
         </div>
     );

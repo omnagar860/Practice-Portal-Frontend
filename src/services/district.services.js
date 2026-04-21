@@ -10,10 +10,10 @@ export const createDistrict = ({ divisionId, district }) =>
     });
 
 export const deleteDistrict = (id) =>
-    apiClient(`/district/deleteDistrict/${id}`, { method: "DELETE" });
+    apiClient(`/district/deleteDistrict/${id}`, { method: "POST" });
 
-export const updateDistrict = (id) =>
-    apiClient(`/district/updateDistrict/${id}`, { method: "PUT" });
+export const updateDistrict = (id,isActive) =>
+    apiClient(`/district/updateDistrict/${id}`, { method: "POST", body :{isActive} });
 
 export const getDistrictByDivisionId = (divisionId)=> {
    return apiClient(`/district/getDistrictByDivisionId/${divisionId}`, {method : "GET"})

@@ -7,15 +7,22 @@ import {
   createOffice,
 } from "../../../services/office.service.js";
 import { getAllDivisions } from "../../../services/devisoin.services.js";
+import { getAllDistricts } from "../../../services/district.services.js";
 
 export default function OfficeList() {
   const [offices, setOffices] = useState([]);
   const [division, setDivision] = useState([]);
+  const [district, setDistrict] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [modal, setModal] = useState({ open: false, editData: null });
   const [filterDivision, setFilterDivision] = useState("");
   const [filterDistrict, setFilterDistrict] = useState("");
+  const [deleteModal, setDeleteModal] = useState({
+    open: false,
+    office: null,
+    error: null,
+  });
 
   useEffect(() => {
     fetchAll();
@@ -25,12 +32,12 @@ export default function OfficeList() {
   const fetchAll = async () => {
     try {
       setLoading(true);
-      const data = await getAllOffice();
-      console.log("fectched office list", data)
+      const officeData = await getAllOffice();
       const divisionData = await getAllDivisions();
-      // console.log("divisionData", divisionData.data)
+      const districtData = await getAllDistricts();
       setDivision(divisionData.data);
-      setOffices(data.data);
+      setOffices(officeData.data);
+      setDistrict(districtData.data)
     } catch (err) {
       setError(err.message);
     } finally {
@@ -39,22 +46,25 @@ export default function OfficeList() {
   };
 
   // ✅ Extract unique divisions from offices array
-  const divisions = [...new Set(offices.map((o) => o.division))];
+  // const divisions = [...new Set(offices.map((o) => o.division))];
+  const divisions = [...division.map((d)=> d.division_name)]
+  // console.log("-=-=-=-=-=================",divisions)
   const divisionInModal = division.map((d) => {
     return { id: d.id, division: d.division_name };
   });
-  console.log("divisionInModal", divisionInModal);
+  // console.log("divisionInModal", divisionInModal);
 
   // ✅ Districts filtered by selected division
-  const districts = filterDivision
-    ? [
-        ...new Set(
-          offices
-            .filter((o) => o.division === filterDivision)
-            .map((o) => o.district),
-        ),
-      ]
-    : [...new Set(offices.map((o) => o.district))];
+  // const districts = filterDivision
+  //   ? [
+  //       ...new Set(
+  //         offices
+  //           .filter((o) => o.division === filterDivision)
+  //           .map((o) => o.district),
+  //       ),
+  //     ]
+  //   : [...new Set(offices.map((o) => o.district))];
+  const districts = [...district.map((d)=> d.district)];
 
   // ✅ Filter offices by selected division and district
   const filtered = offices.filter((o) => {
@@ -63,13 +73,22 @@ export default function OfficeList() {
     return true;
   });
 
-  const handleDelete = async (id) => {
+  const handleDelete = async () => {
     try {
-      await deleteOffice(id); // ✅ calls the imported service function
-      await fetchAll(); // ✅ refresh table
+      await deleteOffice(deleteModal.office.id);
+
+      await fetchAll();
+
+      setDeleteModal({
+        open: false,
+        office: null,
+        error: null,
+      });
     } catch (err) {
-      console.error("Error deleting office:", err);
-      setError(err.message);
+      setDeleteModal((prev) => ({
+        ...prev,
+        error: err.message || "Could not delete office.",
+      }));
     }
   };
 
@@ -121,7 +140,7 @@ export default function OfficeList() {
   const closeModal = () => setModal({ open: false, editData: null });
 
   if (loading) return <p className="p-6 text-gray-400 text-sm">Loading...</p>;
-  if (error) return <p className="p-6 text-red-500 text-sm">{error}</p>;
+  // if (error) return ;
 
   return (
     <div className="flex-1 bg-gray-50 p-6">
@@ -153,12 +172,14 @@ export default function OfficeList() {
             }}
             className="border border-gray-200 rounded-lg px-3 py-2 text-sm bg-white text-gray-700 outline-none focus:border-green-500 min-w-40"
           >
-            <option value="">All divisions</option>
-            {divisions.map((d) => (
-              <option key={d} value={d}>
-                {d}
-              </option>
-            ))}
+          <option value="">All divisions</option>
+          {divisions
+          .sort((a, b) => a.localeCompare(b))
+          .map((d) => (
+            <option key={d} value={d}>
+              {d}
+            </option>
+          ))}
           </select>
         </div>
 
@@ -171,7 +192,7 @@ export default function OfficeList() {
             disabled={filterDivision}
           >
             <option value="">All districts</option>
-            {districts.map((d) => (
+            {districts.sort((a,b)=> a.localeCompare(b)).map((d) => (
               <option key={d} value={d}>
                 {d}
               </option>
@@ -219,11 +240,14 @@ export default function OfficeList() {
                 </td>
               </tr>
             ) : (
-              filtered.map((o, i) => (
+              filtered.sort((a,b)=> a.officeName.localeCompare(b.officeName)).map((o, i) => (
                 <tr key={o.id} className="hover:bg-gray-50">
                   <td className="px-4 py-3 text-gray-400">{i + 1}</td>
                   <td className="px-4 py-3 font-medium">{o.officeName}</td>
-                  <td className="px-4 py-3 text-gray-600"> {`${o.address}, ${o.area}`}</td>
+                  <td className="px-4 py-3 text-gray-600">
+                    {" "}
+                    {`${o.address}, ${o.area}`}
+                  </td>
                   <td className="px-4 py-3 text-gray-600">{o.division}</td>
                   <td className="px-4 py-3 text-gray-600">{o.district}</td>
                   <td className="px-4 py-3">
@@ -242,7 +266,13 @@ export default function OfficeList() {
                       Edit
                     </button>
                     <button
-                      onClick={() => handleDelete(o.id)}
+                      onClick={() =>
+                        setDeleteModal({
+                          open: true,
+                          office: o,
+                          error: null,
+                        })
+                      }
                       className="text-xs border border-red-200 text-red-600 rounded px-2.5 py-1 hover:bg-red-50"
                     >
                       Delete
@@ -254,6 +284,47 @@ export default function OfficeList() {
           </tbody>
         </table>
       </div>
+      {deleteModal.open && (
+        <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+          <div className="bg-white rounded-xl border border-gray-200 p-6 w-96">
+            <h3 className="text-base font-medium mb-2">Delete office</h3>
+
+            <p className="text-sm text-gray-500 mb-5">
+              Are you sure you want to delete
+              <span className="font-medium text-gray-700">
+                {" "}
+                "{deleteModal.office?.officeName}"?
+              </span>
+            </p>
+
+            <div className="flex justify-end gap-2">
+              <button
+                onClick={() =>
+                  setDeleteModal({
+                    open: false,
+                    office: null,
+                    error: null,
+                  })
+                }
+                className="text-sm border border-gray-200 px-4 py-1.5 rounded-lg text-gray-600 hover:bg-gray-50"
+              >
+                Cancel
+              </button>
+
+              <button
+                onClick={handleDelete}
+                className="text-sm bg-red-600 hover:bg-red-500 text-white px-4 py-1.5 rounded-lg"
+              >
+                Delete
+              </button>
+            </div>
+
+            {deleteModal.error && (
+              <p className="text-xs text-red-500 mt-3">{deleteModal.error}</p>
+            )}
+          </div>
+        </div>
+      )}
 
       <OfficeModal
         isOpen={modal.open}
@@ -263,6 +334,8 @@ export default function OfficeList() {
         divisions={divisionInModal} // string array
         districts={districts} // string array — already filtered by division in parent
         offices={offices} // ✅ pass full offices so modal can filter districts by division
+        error={error}
+        setError={setError}
       />
     </div>
   );

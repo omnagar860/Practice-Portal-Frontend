@@ -2,7 +2,7 @@ const actionItems = [
   { key: "create-office",        label: "Create office",        iconBg: "bg-purple-100", iconColor: "text-purple-700", icon: "✦" },
   { key: "assign-post",        label: "Assign post to office",        iconBg: "bg-teal-100",   iconColor: "text-teal-700",   icon: "⇄" },
   { key: "create-user",        label: "Create user",        iconBg: "bg-blue-100",   iconColor: "text-blue-700",   icon: "+" },
-  { key: "assign-post-office", label: "Assign post office", iconBg: "bg-amber-100",  iconColor: "text-amber-700",  icon: "⊙" },
+  { key: "assign-post-user", label: "Assign post to user", iconBg: "bg-amber-100",  iconColor: "text-amber-700",  icon: "⊙" },
   { key: "manage-privileges",  label: "Manage privileges",  iconBg: "bg-red-100",    iconColor: "text-red-700",    icon: "⚙" },
 ];
 

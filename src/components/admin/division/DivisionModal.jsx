@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-export default function DivisionModal({ isOpen, onClose, onSubmit, editData }) {
+export default function DivisionModal({ isOpen, onClose, onSubmit, editData, error }) {
     const [name, setName] = useState("");
 
     // reset name when modal opens or closes
@@ -37,6 +37,7 @@ export default function DivisionModal({ isOpen, onClose, onSubmit, editData }) {
                             Save division
                         </button>
                     </div>
+                {error && <p className="p-6 text-red-500 text-sm">{error}</p>}
                 </div>
             </div>
         );
@@ -62,7 +63,7 @@ export default function DivisionModal({ isOpen, onClose, onSubmit, editData }) {
                         Cancel
                     </button>
                     <button
-                        onClick={() => onSubmit({ id: editData.id })}
+                        onClick={() => onSubmit({ id: editData.id ,isActive :!editData.isActive})}
                         className={`text-sm px-4 py-1.5 rounded-lg text-white
                             ${isActive ? "bg-red-600 hover:bg-red-500" : "bg-green-800 hover:bg-green-700"}`}
                     >

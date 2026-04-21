@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { getDistrictByDivisionId } from "../../../services/district.services";
 
-export default function OfficeModal({ isOpen, onClose, onSubmit, editData, divisions, offices }) {
+export default function OfficeModal({ isOpen, onClose, onSubmit, editData, divisions, offices ,error, setError}) {
     const [step, setStep] = useState(1);
     const [selectedDivision, setSelectedDivision] = useState(null);
     const [selectedDistrict, setSelectedDistrict] = useState(null);
@@ -11,7 +11,7 @@ export default function OfficeModal({ isOpen, onClose, onSubmit, editData, divis
     const [address, setAddress] = useState("");
     const [area, setArea] = useState("");
     const [pincode, setPincode] = useState("");
-    const [error, setError] = useState(null);
+    // const [error, setError] = useState(null);
     // console.log(divisions)
 
     useEffect(() => {
@@ -58,7 +58,7 @@ export default function OfficeModal({ isOpen, onClose, onSubmit, editData, divis
 };
 
     const handleSubmit = async () => {
-        setOfficeName(`Practice Porrtal ${selectedDistrict}`)
+        setOfficeName(`Practice Portal ${selectedDistrict}`)
         if (!officeName.trim()) {
             setError("Office name is required.");
             return;
@@ -73,8 +73,9 @@ export default function OfficeModal({ isOpen, onClose, onSubmit, editData, divis
                 });
             } else {
                 if(/[0-9],[0-9],[0-9],[0-9],[0-9],[0-9]/.test(pincode)) return "Enter a valid pincode"
-                alert("selecteddivision")
-                console.log(selectedDivision)
+                // alert("selecteddivision")
+                console.log(selectedDivision);
+                console.log("pincode", pincode)
                 await onSubmit({
                     officeName: officeName.trim(),
                     address: address.trim(),

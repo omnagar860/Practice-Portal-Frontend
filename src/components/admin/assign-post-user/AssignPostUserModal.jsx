@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { getAllPostForOffice } from "../../../services/office_post";
 import { getAllPost } from "../../../services/post.services";
 
-export default function AssignPostModal({ isOpen, onClose, onSubmit, error:apiError }) {
+export default function AssignPostUserModal({ isOpen, onClose, onSubmit, error:apiError }) {
     const [posts, setPosts] = useState([]);
     const [selectedPost, setSelectedPost] = useState("");
     const [localerror, setLocalError] = useState(null);
@@ -21,6 +21,7 @@ export default function AssignPostModal({ isOpen, onClose, onSubmit, error:apiEr
         setPosts(data.data);
     };
     // fetchPosts(4)
+
 
     if (!isOpen) return null;
 

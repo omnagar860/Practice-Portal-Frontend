@@ -6,6 +6,8 @@ import OfficeList from "../../components/admin/create-office/OfficeList";
 import PostList from "../../components/admin/post/PostList";
 import AssignPostToOffice from "../../components/admin/assign-post-to-office/AssignPostTOffice";
 import CreateUser from "../../components/admin/create-user/CreateUser";
+import AssignPostToUser from "../../components/admin/assign-post-user/AssignPostToUser";
+import ApplicationsList from "../../components/admin/application-type/ApplicationsList";
 
 const CONTENT_MAP = {
     "division":      <DivisionList />,
@@ -14,7 +16,8 @@ const CONTENT_MAP = {
     "post" : <PostList/> ,
     "assign-post": <AssignPostToOffice/>,
     "create-user" : <CreateUser/>,
-    "application-type" : <h1>application-type selected</h1>
+    "assign-post-user" : <AssignPostToUser/>,
+    "application-type" : <ApplicationsList/> , 
 };
 
 export default function AdminDashboard() {

@@ -87,10 +87,12 @@ const handleAssignPost = async ({ postId }) => {
   try {
     setAssignError(""); // reset old error
     const res = await addPostInOffice(selectedOffice, postId);
-    console.log("res from api ", res)
 
+    console.log("res=============", res)
     if (!res.success) {
+      alert("inside error")
       setAssignError(res.message); // 👈 show backend message
+      await fetchPosts(selectedOffice);
       return;
     }
 
@@ -98,6 +100,8 @@ const handleAssignPost = async ({ postId }) => {
     setModalOpen(false);
 
   } catch (error) {
+    alert("inside catch ")
+    console.log("error in catch===================", error)
     setAssignError(error.message || "Something went wrong");
   }
 };
@@ -113,14 +117,14 @@ const handleAssignPost = async ({ postId }) => {
       {/* 🔥 STEP MODAL */}
       {showOfficeModal && (
         <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
-          <div className="bg-white w-[400px] p-6 rounded-xl shadow border relative">
+          <div className="bg-white w-100 p-6 rounded-xl shadow border relative">
 
             {/* STEP 1 */}
             {step === 1 && (
               <>
                 <h3 className="font-medium mb-3">Select Division</h3>
                 <div className="space-y-2 max-h-60 overflow-y-auto">
-                  {divisions.map((d) => (
+                  {divisions.sort((a,b)=> a.division_name.localeCompare(b.division_name)).map((d) => (
                     <button
                       key={d.id}
                       onClick={() => handleDivisionSelect(d)}
@@ -140,7 +144,7 @@ const handleAssignPost = async ({ postId }) => {
 
                 <div className="space-y-2">
                   
-                  {districts.map((d) => (
+                  {districts.sort((a,b)=> a.district.localeCompare(b.district)).map((d) => (
   <button
     key={d.id}
     onClick={() => handleDistrictSelect(d)}
@@ -194,7 +198,7 @@ const handleAssignPost = async ({ postId }) => {
             (o) =>
               o.division === selectedDivision.division_name &&
               o.district === selectedDistrict.district
-          )
+          ).sort((a,b)=> a.officeName.localeCompare(b.officeName))
           .map((o) => (
             <button
               key={o.id}
@@ -261,7 +265,7 @@ const handleAssignPost = async ({ postId }) => {
                     </td>
                   </tr>
                 ) : (
-                  posts.map((p, i) => (
+                  posts.sort((a,b)=> a.postName.localeCompare(b.postName)).map((p, i) => (
                     <tr key={p.postId}>
                       <td className="px-4 py-2">{i + 1}</td>
                       <td className="px-4 py-2">{p.postName}</td>

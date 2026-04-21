@@ -60,7 +60,7 @@ export default function DistrictModal({ isOpen, onClose, onSubmit, editData }) {
 
     const handleToggleStatus = async () => {
         try {
-            await onSubmit({ id: editData.id });
+            await onSubmit({ id: editData.id,isActive:!editData.isActive });
         } catch (err) {
             setError(err.message || "Something went wrong.");
         }
@@ -187,51 +187,3 @@ export default function DistrictModal({ isOpen, onClose, onSubmit, editData }) {
         </div>
     );
 }
-// import { useState, useEffect } from "react";
-
-// export default function DivisionModal({ isOpen, onClose, onSubmit, editData }) {
-//   const [name, setName] = useState("");
-
-//   useEffect(() => {
-//     setName(editData?.name || "");
-//   }, [editData, isOpen]);
-
-//   const handleSubmit = () => {
-//     if (!name.trim()) return;
-//     onSubmit({ name: name.trim(), id: editData?.id });
-//     setName("");
-//     onClose();
-//   };
-
-//   if (!isOpen) return null;
-
-//   return (
-//     <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
-//       <div className="bg-white rounded-xl border border-gray-200 p-6 w-[380px]">
-//         <h3 className="text-base font-medium mb-4">
-//           {editData ? "Edit division" : "Create division"}
-//         </h3>
-
-//         <label className="text-xs text-gray-500 mb-1 block">Division name</label>
-//         <input
-//           type="text"
-//           value={name}
-//           onChange={e => setName(e.target.value)}
-//           onKeyDown={e => e.key === "Enter" && handleSubmit()}
-//           autoFocus
-//           placeholder="e.g. North Division"
-//           className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm outline-none focus:border-green-600 focus:ring-2 focus:ring-green-100"
-//         />
-
-//         <div className="flex justify-end gap-2 mt-5">
-//           <button onClick={onClose} className="text-sm border border-gray-200 px-4 py-1.5 rounded-lg text-gray-600 hover:bg-gray-50">
-//             Cancel
-//           </button>
-//           <button onClick={handleSubmit} className="text-sm bg-green-800 hover:bg-green-700 text-green-50 px-4 py-1.5 rounded-lg">
-//             {editData ? "Update" : "Save division"}
-//           </button>
-//         </div>
-//       </div>
-//     </div>
-//   );
-// }

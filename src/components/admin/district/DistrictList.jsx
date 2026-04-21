@@ -16,6 +16,7 @@ export default function DistrictList() {
         try {
             setLoading(true);
             const data = await getAllDistricts();
+            console.log("fetched districts ===========", data.data)
             setDistricts(data.data);
         } catch (err) {
             setError(err.message);
@@ -29,10 +30,10 @@ export default function DistrictList() {
     const closeModal = () => setModal({ open: false, editData: null });
 
     // ✅ handles both create and toggle status
-    const handleSubmit = async ({ id, divisionId, district }) => {
+    const handleSubmit = async ({ id, divisionId, district,isActive }) => {
         try {
             if (id) {
-                await updateDistrict(id);   // ✅ deactivate/activate
+                await updateDistrict(id,isActive);   // ✅ deactivate/activate
             } else {
                 await createDistrict({ divisionId, district });
             }

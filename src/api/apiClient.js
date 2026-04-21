@@ -12,8 +12,8 @@ const apiClient = async (endpoint, options = {}) => {
   const data = await res.json();
 
   if (!res.ok) {
-    // console.log(data)
-    throw new Error(data.message || "Something went wrong");
+    console.log("data", data) ;
+   throw new Error(   data.error?.message || data.message  || data.error  || "Something went wrong");
   }
 
   return data;
