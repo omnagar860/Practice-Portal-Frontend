@@ -9,3 +9,9 @@ export const createNewApplication = async (payload) => {
 export const getAllApplications = async()=> {
     return apiClient("/application-type/getAllApplication", {method : "GET"});
 }
+export const updateApplication = async(id,isActive)=> {
+    return apiClient(`/application-type/updateApplication/${id}`, {method : "POST",body :{isActive}});
+}
+export const deleteApplication = async(id)=> {
+    return apiClient(`/application-type/deleteApplication/${id}`, {method : "POST"});
+}

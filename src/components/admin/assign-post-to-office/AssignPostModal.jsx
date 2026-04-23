@@ -63,7 +63,7 @@ export default function AssignPostModal({ isOpen, onClose, onSubmit, error:apiEr
                         }}
                         className="bg-green-800 text-white px-4 py-1.5 rounded-lg text-sm"
                     >
-                        Create Post
+                        Assign Post
                     </button>
                 </div>
             </div>

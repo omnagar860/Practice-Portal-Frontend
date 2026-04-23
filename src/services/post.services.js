@@ -8,3 +8,5 @@ export const createPost = (postName)=> apiClient("/post/createPost", {method : "
 export const updatePost = (id) => apiClient(`/post/updatePost/${id}`, {method :"POST"});
 
 export const deletePost = (id) => apiClient(`/post/deltePost/${id}`, {method :"POST"});
+
+export const getPostByOfficeId = (id) => apiClient(`/post/getpostbyofficeid/${id}`, {method : "GET"});

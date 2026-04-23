@@ -17,7 +17,7 @@ export default function Sidebar({ active, onSelect }) {
   const NavBtn = ({ item }) => (
     <button
       onClick={() => onSelect(item.key)}
-      className={`flex items-center gap-2.5 w-full rounded-lg px-2.5 py-2 text-sm text-left mb-0.5 transition-colors
+      className={`flex items-center gap-2.5 w-full rounded-lg px-2.5 py-2 text-sm text-left mb-0.5 transition-colors cursor-pointer
         ${active === item.key ? "bg-green-50 text-green-800" : "hover:bg-gray-100 text-gray-800"}`}
     >
       <span className={`w-7 h-7 rounded-md flex items-center justify-center text-sm shrink-0 ${item.iconBg} ${item.iconColor}`}>

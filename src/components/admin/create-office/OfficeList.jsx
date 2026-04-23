@@ -52,18 +52,7 @@ export default function OfficeList() {
   const divisionInModal = division.map((d) => {
     return { id: d.id, division: d.division_name };
   });
-  // console.log("divisionInModal", divisionInModal);
 
-  // ✅ Districts filtered by selected division
-  // const districts = filterDivision
-  //   ? [
-  //       ...new Set(
-  //         offices
-  //           .filter((o) => o.division === filterDivision)
-  //           .map((o) => o.district),
-  //       ),
-  //     ]
-  //   : [...new Set(offices.map((o) => o.district))];
   const districts = [...district.map((d)=> d.district)];
 
   // ✅ Filter offices by selected division and district
@@ -120,21 +109,6 @@ export default function OfficeList() {
       throw err;
     }
   };
-  //     const handleSubmit = async ({ id, isActive }) => {
-  //     try {
-  //         if (id) {
-  //             console.log(id)
-  //             const result =  await updateOffice(id);
-  //             console.log(result)
-  //             // TODO: await updateOffice(id, { isActive: 0 });
-  //             setOffices(prev => prev.map(o => o.id === id ? { ...o, isActive: false } : o));
-  //         }
-  //         closeModal();
-  //     } catch (err) {
-  //         throw err;
-  //     }
-  // };
-
   const openCreateModal = () => setModal({ open: true, editData: null });
   const openEditModal = (office) => setModal({ open: true, editData: office });
   const closeModal = () => setModal({ open: false, editData: null });
