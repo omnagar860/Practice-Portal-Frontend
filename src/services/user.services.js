@@ -12,3 +12,9 @@ export const getAllUsers = () =>
   apiClient("/user/getAllUsers", {
     method: "GET",
   });
+
+export const getSignleUserData = (userId) => apiClient(`/user/getSingleUserData/${userId}`, {method:"GET"});
+
+export const updateUserDetails = (userId,userData) => apiClient(`/user/updateuser/${userId}`, {method : "POST", body : userData});
+
+export const deleteUserDetails = (userId) => apiClient(`/user/deleteuser/${userId}`, {method : "POST"})

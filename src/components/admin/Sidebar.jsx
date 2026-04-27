@@ -4,6 +4,7 @@ const actionItems = [
   { key: "create-user",        label: "Create user",        iconBg: "bg-blue-100",   iconColor: "text-blue-700",   icon: "+" },
   { key: "assign-post-user", label: "Assign post to user", iconBg: "bg-amber-100",  iconColor: "text-amber-700",  icon: "⊙" },
   { key: "manage-privileges",  label: "Manage privileges",  iconBg: "bg-red-100",    iconColor: "text-red-700",    icon: "⚙" },
+  { key: "user-permission",  label: "Manage User Permission",  iconBg: "bg-red-100",    iconColor: "text-red-700",    icon: "⚙" },
 ];
 
 const masterItems = [

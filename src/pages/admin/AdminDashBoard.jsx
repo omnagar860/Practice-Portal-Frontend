@@ -9,6 +9,7 @@ import CreateUser from "../../components/admin/create-user/CreateUser";
 import AssignPostToUser from "../../components/admin/assign-post-user/AssignPostToUser";
 import ApplicationsList from "../../components/admin/application-type/ApplicationsList";
 import Priviliges from "../../components/admin/preveliges/Priviliges";
+import ManageUserPermissions from "../../components/admin/user-permission/UserPermission";
 
 const CONTENT_MAP = {
     "division":      <DivisionList />,
@@ -19,7 +20,8 @@ const CONTENT_MAP = {
     "create-user" : <CreateUser/>,
     "assign-post-user" : <AssignPostToUser/>,
     "application-type" : <ApplicationsList/> , 
-    "manage-privileges" : <Priviliges/>
+    "manage-privileges" : <Priviliges/>,
+    "user-permission" : <ManageUserPermissions/>
 };
 
 export default function AdminDashboard() {

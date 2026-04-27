@@ -113,26 +113,28 @@ const handleAssignPost = async ({ postId }) => {
 
   return (
     <div className="p-6 bg-gray-50 min-h-screen">
-
       {/* 🔥 STEP MODAL */}
       {showOfficeModal && (
         <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
           <div className="bg-white w-100 p-6 rounded-xl shadow border relative">
-
             {/* STEP 1 */}
             {step === 1 && (
               <>
                 <h3 className="font-medium mb-3">Select Division</h3>
                 <div className="space-y-2 max-h-60 overflow-y-auto">
-                  {divisions.sort((a,b)=> a.division_name.localeCompare(b.division_name)).map((d) => (
-                    <button
-                      key={d.id}
-                      onClick={() => handleDivisionSelect(d)}
-                      className="w-full text-left px-3 py-2 border rounded-lg hover:bg-green-50"
-                    >
-                      {d.division_name}
-                    </button>
-                  ))}
+                  {divisions
+                    .sort((a, b) =>
+                      a.division_name.localeCompare(b.division_name),
+                    )
+                    .map((d) => (
+                      <button
+                        key={d.id}
+                        onClick={() => handleDivisionSelect(d)}
+                        className="w-full text-left px-3 py-2 border rounded-lg hover:bg-green-50"
+                      >
+                        {d.division_name}
+                      </button>
+                    ))}
                 </div>
               </>
             )}
@@ -143,16 +145,24 @@ const handleAssignPost = async ({ postId }) => {
                 <h3 className="font-medium mb-3">Select District</h3>
 
                 <div className="space-y-2">
-                  
-                  {districts.sort((a,b)=> a.district.localeCompare(b.district)).map((d) => (
-  <button
-    key={d.id}
-    onClick={() => handleDistrictSelect(d)}
-    className="w-full text-left px-3 py-2 border rounded-lg hover:bg-green-50"
-  >
-    {d.district}
-  </button>
-))}
+                  {districts.length === 0 && (
+                    <div>
+                      <p>No districts available in selected divsion. </p>
+                      <button></button>
+                    </div>
+                  )}
+                  {districts.length > 0 &&
+                    districts
+                      .sort((a, b) => a.district.localeCompare(b.district))
+                      .map((d) => (
+                        <button
+                          key={d.id}
+                          onClick={() => handleDistrictSelect(d)}
+                          className="w-full text-left px-3 py-2 border rounded-lg hover:bg-green-50"
+                        >
+                          {d.district}
+                        </button>
+                      ))}
                 </div>
 
                 <button
@@ -166,66 +176,64 @@ const handleAssignPost = async ({ postId }) => {
 
             {/* STEP 3 */}
             {step === 3 && (
-  <>
-    <h3 className="font-medium mb-3">Select Office</h3>
+              <>
+                <h3 className="font-medium mb-3">Select Office</h3>
 
-    {offices.filter(
-      (o) =>
-        o.division === selectedDivision.division_name &&
-        o.district === selectedDistrict.district
-    ).length === 0 ? (
-      
-      // ❌ NO OFFICE FOUND UI
-      <div className="text-center py-6">
-  <p className="text-gray-500 text-sm mb-2">
-    No office found for this district
-  </p>
+                {offices.filter(
+                  (o) =>
+                    o.division === selectedDivision.division_name &&
+                    o.district === selectedDistrict.district,
+                ).length === 0 ? (
+                  // ❌ NO OFFICE FOUND UI
+                  <div className="text-center py-6">
+                    <p className="text-gray-500 text-sm mb-2">
+                      No office found for this district
+                    </p>
 
-  <button
-    onClick={() => setStep(2)}
-    className="text-xs text-green-700 underline"
-  >
-    Try another district
-  </button>
-</div>
+                    <button
+                      onClick={() => setStep(2)}
+                      className="text-xs text-green-700 underline"
+                    >
+                      Try another district
+                    </button>
+                  </div>
+                ) : (
+                  // ✅ OFFICE LIST
+                  <div className="space-y-2 max-h-60 overflow-y-auto">
+                    {offices
+                      .filter(
+                        (o) =>
+                          o.division === selectedDivision.division_name &&
+                          o.district === selectedDistrict.district,
+                      )
+                      .sort((a, b) => a.officeName.localeCompare(b.officeName))
+                      .map((o) => (
+                        <button
+                          key={o.id}
+                          onClick={() => handleOfficeSelect(o)}
+                          className="w-full text-left px-3 py-2 border rounded-lg hover:bg-green-50"
+                        >
+                          {o.officeName}
+                        </button>
+                      ))}
+                  </div>
+                )}
 
-    ) : (
-      
-      // ✅ OFFICE LIST
-      <div className="space-y-2 max-h-60 overflow-y-auto">
-        {offices
-          .filter(
-            (o) =>
-              o.division === selectedDivision.division_name &&
-              o.district === selectedDistrict.district
-          ).sort((a,b)=> a.officeName.localeCompare(b.officeName))
-          .map((o) => (
-            <button
-              key={o.id}
-              onClick={() => handleOfficeSelect(o)}
-              className="w-full text-left px-3 py-2 border rounded-lg hover:bg-green-50"
-            >
-              {o.officeName}
-            </button>
-          ))}
-      </div>
-    )}
-
-    {/* BACK BUTTON */}
-    <button
-      onClick={() => setStep(2)}
-      className="mt-3 text-sm text-gray-500 hover:text-gray-700"
-    >
-      ← Back
-    </button>
-  </>
+                {/* BACK BUTTON */}
+                <button
+                  onClick={() => setStep(2)}
+                  className="mt-3 text-sm text-gray-500 hover:text-gray-700"
+                >
+                  ← Back
+                </button>
+              </>
             )}
             <button
-  onClick={() => setShowOfficeModal(false)}
-  className="absolute top-3 right-3 text-gray-400 hover:text-gray-600 text-lg"
->
-  ✕
-</button>
+              onClick={() => setShowOfficeModal(false)}
+              className="absolute top-3 right-3 text-gray-400 hover:text-gray-600 text-lg"
+            >
+              ✕
+            </button>
           </div>
         </div>
       )}
@@ -265,20 +273,22 @@ const handleAssignPost = async ({ postId }) => {
                     </td>
                   </tr>
                 ) : (
-                  posts.sort((a,b)=> a.postName.localeCompare(b.postName)).map((p, i) => (
-                    <tr key={p.postId}>
-                      <td className="px-4 py-2">{i + 1}</td>
-                      <td className="px-4 py-2">{p.postName}</td>
-                      <td className="px-4 py-2">
-                        <button
-                          onClick={() => handleDelete(p.postId)}
-                          className="text-xs border border-red-200 text-red-600 rounded px-2 py-1 hover:bg-red-50"
-                        >
-                          Delete
-                        </button>
-                      </td>
-                    </tr>
-                  ))
+                  posts
+                    .sort((a, b) => a.postName.localeCompare(b.postName))
+                    .map((p, i) => (
+                      <tr key={p.postId}>
+                        <td className="px-4 py-2">{i + 1}</td>
+                        <td className="px-4 py-2">{p.postName}</td>
+                        <td className="px-4 py-2">
+                          <button
+                            onClick={() => handleDelete(p.postId)}
+                            className="text-xs border border-red-200 text-red-600 rounded px-2 py-1 hover:bg-red-50"
+                          >
+                            Delete
+                          </button>
+                        </td>
+                      </tr>
+                    ))
                 )}
               </tbody>
             </table>
@@ -290,10 +300,9 @@ const handleAssignPost = async ({ postId }) => {
       <AssignPostModal
         isOpen={modalOpen}
         onClose={() => {
-          setModalOpen(false)
-          setAssignError("")
-        }
-      }
+          setModalOpen(false);
+          setAssignError("");
+        }}
         onSubmit={handleAssignPost}
         error={assignError}
       />
